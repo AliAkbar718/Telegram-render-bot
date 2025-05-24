@@ -42,7 +42,7 @@ def start(message):
         send_list_button(user_id)
     else:
         join_btn = types.InlineKeyboardMarkup()
-        join_btn.add(types.InlineKeyboardButton("عضویت در کانال", url=f"https://t.me/{CHANNEL_USERNAME[1:]}"))
+        join_btn.add(types.InlineKeyboardButton("عضویت در کانال", url=f"https://t.me/rap_family1{CHANNEL_USERNAME[1:]}"))
         bot.send_message(user_id, "برای استفاده از ربات، ابتدا عضو کانال شو:", reply_markup=join_btn)
 
 # دکمه لیست
@@ -60,7 +60,7 @@ def send_features(message):
 
     else:
         join_btn = types.InlineKeyboardMarkup()
-        join_btn.add(types.InlineKeyboardButton("عضویت در کانال", url=f"https://t.me/{CHANNEL_USERNAME[1:]}"))
+        join_btn.add(types.InlineKeyboardButton("عضویت در کانال", url=f"https://t.me/rap_family1{CHANNEL_USERNAME[1:]}"))
         bot.send_message(user_id, "اول باید عضو کانال بشی:", reply_markup=join_btn)
 
 
