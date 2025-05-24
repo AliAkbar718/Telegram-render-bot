@@ -11,6 +11,7 @@ import os
 from flask import Flask, request
 import random
 import pytz
+import requests
 
 
 TOKEN = "7579645804:AAHt5O6hHdXtdigsQQ-WMGiIm7cJexySTVc"
