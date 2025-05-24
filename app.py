@@ -21,8 +21,6 @@ app = Flask(__name__)
 
 WEBHOOK_SECRET_PATH = '/webhook'  # می‌تونی امن‌ترش هم بکنی
 
-
-
 def is_user_member(user_id):
     try:
         res = bot.get_chat_member(CHANNEL_USERNAME, user_id)
@@ -56,6 +54,7 @@ def show_features(message):
         join_button = types.InlineKeyboardMarkup()
         join_button.add(types.InlineKeyboardButton("عضویت در کانال", url=f"https://t.me/{CHANNEL_USERNAME[1:]}"))
         bot.send_message(user_id, "برای دیدن لیست باید عضو کانال بشی.", reply_markup=join_button)
+
 
 
 
