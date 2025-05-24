@@ -13,55 +13,48 @@ import random
 import pytz
 
 
+TOKEN = '579645804:AAHt5O6hHdXtdigsQQ-WMGiIm7cJexySTVc'
+CHANNEL_ID =  -1002317714854
 
+bot = telebot.TeleBot(TOKEN)
 
 app = Flask(__name__)
 
 WEBHOOK_SECRET_PATH = '/webhook'  
 
-TOKEN = '7579645804:AAHt5O6hHdXtdigsQQ-WMGiIm7cJexySTVc'
-CHANNEL_USERNAME = 'rap_family1'
-
-bot = telebot.TeleBot(TOKEN)
-
-
-# بررسی عضویت کاربر
+# بررسی عضویت
 def is_user_member(user_id):
     try:
-        status = bot.get_chat_member(CHANNEL_USERNAME, user_id).status
-        return status in ['member', 'administrator', 'creator']
+        member = bot.get_chat_member(CHANNEL_ID, user_id)
+        return member.status in ['member', 'administrator', 'creator']
     except:
         return False
 
-# شروع ربات
+# استارت
 @bot.message_handler(commands=['start'])
 def start(message):
     user_id = message.from_user.id
-    if is_user_member(user_id):
-        bot.send_message(user_id, "سلام! من علی بات🤖 هستم. برای دیدن قابلیت‌هام دکمه لیست رو بزن یا تایپ کن.")
-        send_list_button(user_id)
-    else:
-        join_btn = types.InlineKeyboardMarkup()
-        join_btn.add(types.InlineKeyboardButton("عضویت در کانال", url=f"https://t.me/{CHANNEL_USERNAME[1:]}"))
-        bot.send_message(user_id, "برای استفاده از ربات، ابتدا عضو کانال شو:", reply_markup=join_btn)
-
-# دکمه لیست
-def send_list_button(user_id):
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add('لیست')
-    bot.send_message(user_id, "روی دکمه زیر بزن:", reply_markup=markup)
 
-# دریافت لیست
+    if is_user_member(user_id):
+        bot.send_message(user_id, "سلام من علی بات🤖 هستم!\nبرای مشاهده قابلیت‌هام، روی دکمه «لیست» بزن یا تایپ کن.", reply_markup=markup)
+    else:
+        join_btn = types.InlineKeyboardMarkup()
+        join_btn.add(types.InlineKeyboardButton("عضویت در کانال", url="https://t.me/rap_family1"))  # لینک کانالتو بذار
+        bot.send_message(user_id, "برای استفاده از ربات باید اول در کانال عضو بشی.\nسپس روی دکمه «لیست» بزن.", reply_markup=join_btn)
+        bot.send_message(user_id, "وقتی عضو شدی، روی «لیست» بزن:", reply_markup=markup)
+
+# لیست
 @bot.message_handler(func=lambda msg: msg.text == 'لیست')
 def send_features(message):
     user_id = message.from_user.id
     if is_user_member(user_id):
         bot.send_message(user_id, '-<code> مدیریت گروه🤵‍♂️</code>\n\n-<code>بیوگرافی🗨️</code>\n\n-<code> اصطلاحات انگلیسی🔠</code>\n\n-<code> جرعت حقیقت❓</code>\n\n-<code> جوک😄</code>\n\n-<code>فونت اسم♍</code>\n\n-<code> زبان هخامنشی𐎠</code>\n\n-<code> دانستنی⁉️</code>\n\n-<code> ارتباط با ما📞</code>\n\n<b>متن ها به صورت مونو هستند روی متن بزنید کپی میشوند</b>', parse_mode="HTML")
-
     else:
         join_btn = types.InlineKeyboardMarkup()
-        join_btn.add(types.InlineKeyboardButton("عضویت در کانال", url=f"https://t.me/{CHANNEL_USERNAME[1:]}"))
-        bot.send_message(user_id, "اول باید عضو کانال بشی:", reply_markup=join_btn)
+        join_btn.add(types.InlineKeyboardButton("عضویت در کانال", url="https://t.me/rap_family1"))
+        bot.send_message(user_id, "هنوز عضو کانال نیستی!\nبرای استفاده از ربات، ابتدا عضو شو.", reply_markup=join_btn)
 
 
 
