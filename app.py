@@ -53,7 +53,7 @@ def start(message):
 def send_features(message):
     user_id = message.from_user.id
     if is_user_member(user_id):
-        bot.send_message(user_id, '-<code> مدیریت گروه🤵‍♂️</code>\n\n-<code>بیوگرافی🗨️</code>\n\n-<code> اصطلاحات انگلیسی🔠</code>\n\n-<code> جرعت حقیقت❓</code>\n\n-<code> جوک😄</code>\n\n-<code>فونت اسم♍</code>\n\n-<code> زبان هخامنشی𐎠</code>\n\n-<code> دانستنی⁉️</code>\n\n-<code> ارتباط با ما📞</code>\n\n<b>متن ها به صورت مونو هستند روی متن بزنید کپی میشوند</b>', parse_mode="HTML")
+        bot.send_message(user_id, '-<code> مدیریت گروه🤵‍♂️</code>\n\n-<code> بیوگرافی🗨️</code>\n\n-<code> اصطلاحات انگلیسی🔠</code>\n\n-<code> جرعت حقیقت❓</code>\n\n-<code> جوک😄</code>\n\n-<code> فونت اسم♍</code>\n\n-<code> زبان هخامنشی𐎠</code>\n\n-<code> دانستنی⁉️</code>\n\n-<code> ارتباط با ما📞</code>\n\n<b>متن ها به صورت مونو هستند روی متن بزنید کپی میشوند</b>', parse_mode="HTML")
     else:
         join_btn = types.InlineKeyboardMarkup()
         join_btn.add(types.InlineKeyboardButton("عضویت در کانال✅", url="https://t.me/rap_family1"))
