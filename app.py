@@ -20,7 +20,7 @@ app = Flask(__name__)
 WEBHOOK_SECRET_PATH = '/webhook'  
 
 TOKEN = '7579645804:AAHt5O6hHdXtdigsQQ-WMGiIm7cJexySTVc'
-CHANNEL_USERNAME = 'rap-family1'
+CHANNEL_USERNAME = '@rap-family1'
 
 bot = telebot.TeleBot(TOKEN)
 
