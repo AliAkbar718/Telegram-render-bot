@@ -13,7 +13,7 @@ import random
 import pytz
 
 
-TOKEN = '579645804:AAHt5O6hHdXtdigsQQ-WMGiIm7cJexySTVc'
+TOKEN = '7579645804:AAHt5O6hHdXtdigsQQ-WMGiIm7cJexySTVc'
 CHANNEL_ID =  -1002317714854
 
 bot = telebot.TeleBot(TOKEN)
