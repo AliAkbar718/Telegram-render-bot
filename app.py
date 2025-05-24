@@ -546,8 +546,3 @@ def option_messages(message):
         bot.send_message(message.chat.id, text=Bot_Response, parse_mode= 'HTML') 
         
 
-if __name__ == "__main__":
-    bot.remove_webhook()
-    bot.set_webhook(url="https://ali-bot1.onrender.com/" + TOKEN)
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
