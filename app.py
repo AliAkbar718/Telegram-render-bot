@@ -33,6 +33,7 @@ def is_user_member(user_id):
 # استارت
 @bot.message_handler(commands=['start'])
 def start(message):
+    print('کاربر استارت زد')
     user_id = message.from_user.id
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add('لیست')
