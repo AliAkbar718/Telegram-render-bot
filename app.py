@@ -15,9 +15,7 @@ import pytz
 
 TOKEN = '579645804:AAHt5O6hHdXtdigsQQ-WMGiIm7cJexySTVc'
 CHANNEL_ID =  -1002317714854
-
 bot = telebot.TeleBot(TOKEN)
-
 app = Flask(__name__)
 
 WEBHOOK_SECRET_PATH = '/webhook'  
@@ -32,12 +30,21 @@ def is_user_member(user_id):
 
 # استارت
 @bot.message_handler(commands=['start'])
+# بررسی عضویت
+def is_user_member(user_id):
+    try:
+        member = bot.get_chat_member(CHANNEL_ID, user_id)
+        return member.status in ['member', 'administrator', 'creator']
+    except:
+        return False
+    
 def start(message):
     print('کاربر استارت زد')
     user_id = message.from_user.id
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
     markup.add('لیست')
-
+    
+    
     if is_user_member(user_id):
         bot.send_message(user_id, "سلام من علی بات🤖 هستم!\nبرای مشاهده قابلیت‌هام، روی دکمه «لیست» بزن یا تایپ کن.", reply_markup=markup)
     else:
