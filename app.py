@@ -45,7 +45,7 @@ def start(message):
     else:
         join_btn = types.InlineKeyboardMarkup()
         join_btn.add(types.InlineKeyboardButton("عضویت در کانال✅", url="https://t.me/rap_family1"))  # لینک کانالتو بذار
-        bot.send_message(user_id, "توی کانال عضو نیستی ❌ برای استفاده از قابلیت ربات باید عضو کانال بشی\n\n ", reply_markup=join_btn)
+        bot.send_message(user_id, "توی کانال عضو نیستی ❌\n\n برای استفاده از قابلیت ربات باید عضو کانال بشی\n\n ", reply_markup=join_btn)
         bot.send_message(user_id, "وقتی عضو شدی روی دکمه «لیست» بزن:", reply_markup=markup)
 
 # لیست
