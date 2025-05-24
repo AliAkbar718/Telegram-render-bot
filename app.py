@@ -13,18 +13,52 @@ import random
 import pytz
 
 
-CHANNEL_USERNAME = "rap_family1"
-
 TOKEN = "7579645804:AAHt5O6hHdXtdigsQQ-WMGiIm7cJexySTVc"
+CHANNEL_USERNAME = "rap_family1"
 bot = telebot.TeleBot(TOKEN)
+
 app = Flask(__name__)
 
 WEBHOOK_SECRET_PATH = '/webhook'  # می‌تونی امن‌ترش هم بکنی
 
-# هندلر
+
+
+def is_user_member(user_id):
+    try:
+        res = bot.get_chat_member(CHANNEL_USERNAME, user_id)
+        status = res.status
+        return status in ['member', 'administrator', 'creator']
+    except:
+        return False
+
 @bot.message_handler(commands=['start'])
-def start_message(message):
-    bot.send_message(message.chat.id, 'سلام من علی بات🤖هستم\n\n برای اطلاع از قابلیت من کلمه <b>(لیست)</b> رو ارسال کن', parse_mode="HTML")
+def start(message):
+    user_id = message.from_user.id
+    if is_user_member(user_id):
+        bot.send_message(user_id, "سلام! من علی بات🤖 هستم. برای دیدن قابلیت‌هام دکمه لیست رو بزن یا تایپ کن.")
+        send_list_button(user_id)
+    else:
+        join_button = types.InlineKeyboardMarkup()
+        join_button.add(types.InlineKeyboardButton("عضویت در کانال", url=f"https://t.me/{CHANNEL_USERNAME[1:]}"))
+        bot.send_message(user_id, "برای استفاده از ربات، لطفاً ابتدا عضو کانال شو.", reply_markup=join_button)
+
+def send_list_button(user_id):
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    markup.add('لیست')
+    bot.send_message(user_id, "دکمه زیر رو بزن:", reply_markup=markup)
+
+@bot.message_handler(func=lambda msg: msg.text == 'لیست')
+def show_features(message):
+    user_id = message.from_user.id
+    if is_user_member(user_id):
+        bot.send_message(user_id,'-<code> مدیریت گروه🤵‍♂️</code>\n\n-<code>بیوگرافی🗨️</code>\n\n-<code> اصطلاحات انگلیسی🔠</code>\n\n-<code> جرعت حقیقت❓</code>\n\n-<code> جوک😄</code>\n\n-<code>فونت اسم♍</code>\n\n-<code> زبان هخامنشی𐎠</code>\n\n-<code> دانستنی⁉️</code>\n\n-<code> ارتباط با ما📞</code>\n\n<b>متن ها به صورت مونو هستند روی متن بزنید کپی میشوند</b>', parse_mode="HTML")
+    else:
+        join_button = types.InlineKeyboardMarkup()
+        join_button.add(types.InlineKeyboardButton("عضویت در کانال", url=f"https://t.me/{CHANNEL_USERNAME[1:]}"))
+        bot.send_message(user_id, "برای دیدن لیست باید عضو کانال بشی.", reply_markup=join_button)
+
+
+
 
 @app.route(WEBHOOK_SECRET_PATH, methods=['POST'])
 def webhook():
