@@ -158,7 +158,7 @@ def handle_photo(message):
 @bot.message_handler(content_types=['new_chat_members'])
 def welcome_new_member(message):
     for new_member in message.new_chat_members:
-        welcome_text = f'🎉 کاربر @{message.from_user.username}\n خوش اومدی به گروه! 🎉'
+        welcome_text = f'🎉 کاربر {message.from_user.username}\n خوش اومدی به گروه! 🎉'
         bot.send_message(message.chat.id, text=welcome_text)
 
 
