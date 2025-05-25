@@ -26,22 +26,6 @@ app = Flask(__name__)
 
 WEBHOOK_SECRET_PATH = '/webhook'  
 
-
-@bot.message_handler(content_types=['new_chat_members'])
-def welcome_new_user(message):
-    for new_user in message.new_chat_members:
-        name = new_user.first_name
-
-        # زمان فعلی
-        now = datetime.datetime.now()
-        jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
-        time_now = now.strftime('%H:%M')
-
-        # پیام خوش‌آمد
-        welcome_text = f"سلام {name} عزیز!\nبه گپ ما خوش اومدی!\nامروز {jalali_date} هست و ساعت {time_now}"
-        bot.send_message(message.chat.id, welcome_text)
-
-
 # بررسی عضویت
 def is_user_member(user_id):
     try:
@@ -75,6 +59,18 @@ def send_features(message):
         join_btn.add(types.InlineKeyboardButton("عضویت در کانال✅", url="https://t.me/rap_family1"))
         bot.send_message(user_id, "هنوز عضو کانال نیستی❌\n\nبرای استفاده از ربات ابتدا عضو شو.", reply_markup=join_btn)
 
+
+@bot.message_handler(content_types=['new_chat_members'])
+def welcome_new_user(message):
+    for new_user in message.new_chat_members:
+        name = new_user.first_name
+
+        now = datetime.datetime.now()
+        jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
+        time_now = now.strftime('%H:%M')
+
+        welcome_text = f"سلام {name} عزیز!\nبه گپ ما خوش اومدی!\nامروز {jalali_date} هست و ساعت {time_now}"
+        bot.send_message(message.chat.id, welcome_text)
 
 
 @app.route(WEBHOOK_SECRET_PATH, methods=['POST'])
@@ -118,7 +114,7 @@ month_names = {
     'Esfand': 'اسفند'
 }
 
-CHANNEL_USERNAME = 'rap_family1'
+
 
 
 reply_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
@@ -171,7 +167,11 @@ def handle_photo(message):
 
 
 
-
+@bot.message_handler(content_types=['new_chat_members'])
+def welcome_new_member(message):
+    for new_member in message.new_chat_members:
+        welcome_text = f'🎉 کاربر @{message.from_user.username}\n خوش اومدی به گروه! 🎉'
+        bot.send_message(message.chat.id, text=welcome_text)
 
 
 @bot.message_handler(content_types=['left_chat_member'])
