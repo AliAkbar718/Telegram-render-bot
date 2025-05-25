@@ -157,21 +157,12 @@ def handle_photo(message):
 
 @bot.message_handler(content_types=['new_chat_members'])
 def welcome_new_member(message):
-    for new_user in message.new_chat_members:
-         try:
-            name = new_user.first_name or "کاربر جدید"
-
-            # زمان و تاریخ فعلی
-            now = datetime.datetime.now()
-            jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
-            current_time = now.strftime('%H:%M')
-
-            # پیام خوش‌آمد
-            text = f"سلام {name} عزیز!\nبه گروه خوش اومدی!\nامروز {jalali_date} هست و ساعت {current_time}"
-            bot.send_message(message.chat.id, text)
-
-         except Exception as e:
-             print(f"خطا در خوش‌آمدگویی: {e}")
+     for new_user in message.new_chat_members:
+         now = datetime.datetime.now()
+         jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
+         current_time = now.strftime('%H:%M')
+         text = f"سلام عزیز!\nبه گروه خوش اومدی!\nامروز {jalali_date} هست و ساعت {current_time}"
+         bot.send_message(message.chat.id, text)
 
 
 
