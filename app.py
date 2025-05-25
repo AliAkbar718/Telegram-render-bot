@@ -1,6 +1,6 @@
 import telebot
 from pyexpat.errors import messages
-from telebot import types
+from telebot import TeleBot, types
 from telebot.types import (InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, ReactionTypeEmoji)
 import time
 import datetime
@@ -13,10 +13,10 @@ import random
 import pytz
 
 
-TOKEN = '7579645804:AAHt5O6hHdXtdigsQQ-WMGiIm7cJexySTVc'
-CHANNEL_ID =  -1002317714854
 
-bot = telebot.TeleBot(TOKEN)
+CHANNEL_ID =  -1002317714854
+bot = TeleBot('7579645804:AAHt5O6hHdXtdigsQQ-WMGiIm7cJexySTVc')
+
 
 WEBHOOK_URL = 'https://telegram-bot81.onrender.com/webhook'
 bot.remove_webhook()
@@ -25,6 +25,29 @@ bot.set_webhook(url=WEBHOOK_URL)
 app = Flask(__name__)
 
 WEBHOOK_SECRET_PATH = '/webhook'  
+
+@bot.message_handler(content_types=['new_chat_members'])
+def welcome_new_user(message):
+    try:
+        for new_user in message.new_chat_members:
+            name = new_user.first_name or "کاربر جدید"
+
+            now = datetime.datetime.now()
+            jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
+            time_now = now.strftime('%H:%M')
+
+            welcome_text = (
+                f"سلام {name} عزیز!\n"
+                f"به گپ ما خوش اومدی!\n"
+                f"امروز {jalali_date} هست و ساعت {time_now}"
+            )
+
+            bot.send_message(message.chat.id, welcome_text)
+
+    except Exception as e:
+        print(f"خطا در ارسال پیام خوش‌آمد: {e}")
+
+
 
 # بررسی عضویت
 def is_user_member(user_id):
@@ -59,18 +82,6 @@ def send_features(message):
         join_btn.add(types.InlineKeyboardButton("عضویت در کانال✅", url="https://t.me/rap_family1"))
         bot.send_message(user_id, "هنوز عضو کانال نیستی❌\n\nبرای استفاده از ربات ابتدا عضو شو.", reply_markup=join_btn)
 
-
-@bot.message_handler(content_types=['new_chat_members'])
-def welcome_new_user(message):
-    for new_user in message.new_chat_members:
-        name = new_user.first_name
-
-        now = datetime.datetime.now()
-        jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
-        time_now = now.strftime('%H:%M')
-
-        welcome_text = f"سلام {name} عزیز!\nبه گپ ما خوش اومدی!\nامروز {jalali_date} هست و ساعت {time_now}"
-        bot.send_message(message.chat.id, welcome_text)
 
 
 @app.route(WEBHOOK_SECRET_PATH, methods=['POST'])
