@@ -157,14 +157,14 @@ def handle_photo(message):
 
 @bot.message_handler(content_types=['new_chat_members'])
 def welcome_new_member(message):
-     for new_user in message.new_chat_members:
-         now = datetime.datetime.now()
-         jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
-         current_time = now.strftime('%H:%M')
-         text = f"سلام عزیز!\nبه گروه خوش اومدی!\nامروز {jalali_date} هست و ساعت {current_time}"
-         bot.send_message(message.chat.id, text)
+    for new_member in message.new_chat_members:
+          now = datetime.datetime.now()
+          jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
+          current_time = now.strftime('%H:%M')
+          welcome_text = f'🎉 کاربر @{message.from_user.username}\n خوش اومدی به گروه!\n امروز {jalali_date} هست و ساعت {current_time} 🎉'
+          bot.send_message(message.chat.id, text=welcome_text)
 
-
+ 
 
 @bot.message_handler(content_types=['left_chat_member'])
 def handle_left_member(message):
