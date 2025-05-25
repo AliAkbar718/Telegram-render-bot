@@ -26,6 +26,22 @@ app = Flask(__name__)
 
 WEBHOOK_SECRET_PATH = '/webhook'  
 
+
+@bot.message_handler(content_types=['new_chat_members'])
+def welcome_new_user(message):
+    for new_user in message.new_chat_members:
+        name = new_user.first_name
+
+        # زمان فعلی
+        now = datetime.datetime.now()
+        jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
+        time_now = now.strftime('%H:%M')
+
+        # پیام خوش‌آمد
+        welcome_text = f"سلام {name} عزیز!\nبه گپ ما خوش اومدی!\nامروز {jalali_date} هست و ساعت {time_now}"
+        bot.send_message(message.chat.id, welcome_text)
+
+
 # بررسی عضویت
 def is_user_member(user_id):
     try:
@@ -102,23 +118,6 @@ month_names = {
     'Esfand': 'اسفند'
 }
 
-@bot.message_handler(func=lambda message: message.text.strip().lower() == 'زمان')
-def send_jalali_datetime(message):
-    iran_time = datetime.now(pytz.timezone('Asia/Tehran'))
-    shamsi_time = jdatetime.datetime.fromgregorian(datetime=iran_time)
-
-    weekday_en = shamsi_time.strftime('%A')     # مثلاً Saturday
-    month_en = shamsi_time.strftime('%B')       # مثلاً Farvardin
-
-    weekday_fa = weekday_names.get(weekday_en, weekday_en)
-    month_fa = month_names.get(month_en, month_en)
-
-    date_str = f"{shamsi_time.day} {month_fa} {shamsi_time.year}"
-    time_str = shamsi_time.strftime('%H:%M:%S')
-
-    response = f'{weekday_fa} {date_str} \n\nزمان: {time_str}'
-    bot.reply_to(message, f'تاریخ 📅 و زمان ⏰ فعلی:\n\n{response}')
-
 CHANNEL_USERNAME = 'rap_family1'
 
 
@@ -126,14 +125,6 @@ reply_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=Fal
 reply_keyboard.add('ارتباط با ما📞 ', 'مدیریت گروه🤵‍♂️', 'بیوگرافی🗨️', 'اصطلاحات انگلیسی🔠', 'جوک😄', 'زبان هخامنشی𐎠', 'فونت اسم♍', 'جرعت حقیقت❔', 'دانستنی⁉️')
 
 
-@bot.message_handler(func=lambda message: message.text.strip().lower() == 'زمان')
-def send_jalali_datetime(message):
-    now = jdatetime.datetime.now()
-    weekday_name = now.strftime('%A')  # نام روز هفته به فارسی
-    date_str = now.strftime('%d %B %Y')  # تاریخ به‌صورت متنی
-    time_str = now.strftime('%H:%M:%S')  # زمان فعلی
-    response = f'{weekday_name} {date_str} \n\nزمان: {time_str}'
-    bot.reply_to(message, f'  تاریخ 📅 و زمان ⏰ فعلی:\n\n{response}')
 
 
 # حروف فارسی به حروف میخی
@@ -180,11 +171,7 @@ def handle_photo(message):
 
 
 
-@bot.message_handler(content_types=['new_chat_members'])
-def welcome_new_member(message):
-    for new_member in message.new_chat_members:
-        welcome_text = f'🎉 کاربر @{message.from_user.username}\n خوش اومدی به گروه! 🎉'
-        bot.send_message(message.chat.id, text=welcome_text)
+
 
 
 @bot.message_handler(content_types=['left_chat_member'])
