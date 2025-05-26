@@ -26,6 +26,57 @@ app = Flask(__name__)
 
 WEBHOOK_SECRET_PATH = '/webhook'  
 
+# دیکشنری برای شمارش تخلف‌ها
+user_warnings = {}
+
+# تشخیص لینک در متن پیام
+def contains_link(text):
+    if not text:
+        return False
+    return any(word in text.lower() for word in ['http', 'https', 't.me', '@'])
+
+# بررسی اینکه آیا کاربر ادمین هست یا نه
+def is_admin(chat_id, user_id):
+    try:
+        member = bot.get_chat_member(chat_id, user_id)
+        return member.status in ['administrator', 'creator']
+    except:
+        return False
+
+@bot.message_handler(func=lambda m: True, content_types=['text'])
+def handle_message(message):
+    chat_id = message.chat.id
+    user_id = message.from_user.id
+    first_name = message.from_user.first_name
+
+    if contains_link(message.text):
+        if is_admin(chat_id, user_id):
+            return
+
+        try:
+            # حذف پیام
+            bot.delete_message(chat_id, message.message_id)
+
+            # افزایش شمارش تخلف
+            user_warnings[user_id] = user_warnings.get(user_id, 0) + 1
+            warn_count = user_warnings[user_id]
+
+            if warn_count == 1:
+                bot.send_message(
+                    chat_id,
+                    f"⚠️ کاربر {first_name}\nارسال لینک 1 از 2\ ارسال لینک ممنوع هست! در صورت تکرار حذف می شوید "
+                )
+            elif warn_count >= 2:
+                bot.send_message(
+                    chat_id,
+                    f"⛔️ کاربر {first_name}\nارسال لینک 2 از 2\ از گروه حذف شد"
+                )
+                bot.ban_chat_member(chat_id, user_id)
+
+        except Exception as e:
+            print(f"خطا در هشدار یا حذف: {e}")
+
+
 # بررسی عضویت
 def is_user_member(user_id):
     try:
@@ -181,46 +232,7 @@ def is_user_admin(chat_id, user_id):
             return True
     return False
 
-# بررسی وجود لینک
-def contains_link(text):
-    if not text:
-        return False
-    return any(word in text.lower() for word in ['http', 'https', 't.me', '@'])
 
-# بررسی اینکه کاربر مدیر است یا نه
-def is_admin(chat_id, user_id):
-    try:
-        member = bot.get_chat_member(chat_id, user_id)
-        return member.status in ['administrator', 'creator']
-    except Exception as e:
-        print(f"خطا در بررسی مدیر بودن: {e}")
-        return False
-
-# بررسی تمام پیام‌های متنی
-@bot.message_handler(func=lambda m: True, content_types=['text'])
-def handle_message(message):
-    chat_id = message.chat.id
-    user_id = message.from_user.id
-
-    if contains_link(message.text):
-        if is_admin(chat_id, user_id):
-            return  # ادمین هست، کاری نکن
-
-        try:
-            # حذف پیام
-            bot.delete_message(chat_id, message.message_id)
-
-            # هشدار و حذف فوری
-            warning_text = (
-                f"کاربر {message.from_user.first_name}!\n"
-                f"ارسال لینک 1 از 1\n"
-                f"ارسال لینک در این گروه ممنوع است، شما حذف شدید."
-            )
-            bot.send_message(chat_id, warning_text)
-            bot.ban_chat_member(chat_id, user_id)
-
-        except Exception as e:
-            print(f"خطا در حذف یا اخراج کاربر: {e}")
 
 
 @bot.message_handler(func=lambda m: m.text == 'پین')
