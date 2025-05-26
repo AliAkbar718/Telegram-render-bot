@@ -181,9 +181,6 @@ def is_user_admin(chat_id, user_id):
             return True
     return False
 
-# هشدار کاربران (user_id: warning_count)
-user_warnings = {}
-
 # بررسی وجود لینک
 def contains_link(text):
     if not text:
@@ -199,7 +196,7 @@ def is_admin(chat_id, user_id):
         print(f"خطا در بررسی مدیر بودن: {e}")
         return False
 
-# هندلر پیام‌ها
+# بررسی تمام پیام‌های متنی
 @bot.message_handler(func=lambda m: True, content_types=['text'])
 def handle_message(message):
     chat_id = message.chat.id
@@ -207,25 +204,24 @@ def handle_message(message):
 
     if contains_link(message.text):
         if is_admin(chat_id, user_id):
-            return  # مدیر هست، کاری نکن
+            return  # ادمین هست، کاری نکن
 
         try:
             # حذف پیام
             bot.delete_message(chat_id, message.message_id)
 
-            # شمارش اخطارها
-            user_warnings[user_id] = user_warnings.get(user_id, 0) + 1
-
-            if user_warnings[user_id] == 1:
-                bot.send_message(chat_id,
-                    f"کاربر {message.from_user.first_name}، ارسال لینک در گروه ممنوع است!\nدر صورت تکرار، حذف خواهید شد.")
-            else:
-                bot.send_message(chat_id,
-                    f"{message.from_user.first_name} به دلیل ارسال مکرر لینک، از گروه حذف شد.")
-                bot.ban_chat_member(chat_id, user_id)
+            # هشدار و حذف فوری
+            warning_text = (
+                f"کاربر {message.from_user.first_name}!\n"
+                f"ارسال لینک 1 از 1\n"
+                f"ارسال لینک در این گروه ممنوع است، شما حذف شدید."
+            )
+            bot.send_message(chat_id, warning_text)
+            bot.ban_chat_member(chat_id, user_id)
 
         except Exception as e:
-            print(f"خطا در حذف یا اخطار: {e}")
+            print(f"خطا در حذف یا اخراج کاربر: {e}")
+
 
 @bot.message_handler(func=lambda m: m.text == 'پین')
 def pin(m):
