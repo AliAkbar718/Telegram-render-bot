@@ -165,21 +165,20 @@ def handle_photo(message):
 
 @bot.message_handler(content_types=['new_chat_members'])
 def welcome_new_user(message):
-    for new_user in message.new_chat_members:
-        try:
-            name = new_user.first_name or "کاربر عزیز"
+    for new_member in message.new_chat_members:
+        iran_time = datetime.now(pytz.timezone('Asia/Tehran'))
+        shamsi_time = jdatetime.datetime.fromgregorian(datetime=iran_time)
 
-            # زمان فعلی میلادی و تبدیل به شمسی
-            now = datetime.datetime.now()
-            jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
-            time_now = now.strftime('%H:%M')
+        weekday_en = shamsi_time.strftime('%A')     # مثلاً Saturday
+        month_en = shamsi_time.strftime('%B')       # مثلاً Farvardin
 
-            # پیام خوش‌آمد
-            welcome_msg = f"سلام {name} عزیز!\nخوش اومدی به گروه!\nامروز {jalali_date} هست و ساعت {time_now}"
-            bot.send_message(message.chat.id, welcome_msg)
+        weekday_fa = weekday_names.get(weekday_en, weekday_en)
+        month_fa = month_names.get(month_en, month_en)
 
-        except Exception as e:
-            print(f"خطا در پیام خوش‌آمد: {e}")
+        date_str = f"{shamsi_time.day} {month_fa} {shamsi_time.year}"
+        time_str = shamsi_time.strftime('%H:%M:%S')
+        response = f'{weekday_fa} {date_str} \n\nزمان: {time_str}'
+        bot.send_message(message.chat.id, f'تاریخ 📅 و زمان ⏰ فعلی:\n\n{response}')
 
 
 
