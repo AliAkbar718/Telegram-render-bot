@@ -178,8 +178,8 @@ def welcome_new_user(message):
 
         date_str = f"{shamsi_time.day} {month_fa} {shamsi_time.year}"
         time_str = shamsi_time.strftime('%H:%M:%S')
-        response = f'{weekday_fa} {date_str} \n\nزمان: {time_str}'
-        bot.send_message(message.chat.id, f'تاریخ 📅 و زمان ⏰ فعلی:\n\n{response}')
+        response = f' {message.from_user.first_name} {weekday_fa} {date_str} \n\nزمان: {time_str}  '
+        bot.send_message(message.chat.id, f'سلام به گپمون خوش اومدی✨❤️\n\nامروز{response}')
 
 
 
