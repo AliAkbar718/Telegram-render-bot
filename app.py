@@ -71,26 +71,6 @@ def webhook():
 def index():
     return 'ربات فعال است', 200
    
-    
-
-
-
-# @bot.message_handler(func=lambda message: message.text.strip().lower() == 'زمان')
-# def send_jalali_datetime(message):
-#     iran_time = datetime.now(pytz.timezone('Asia/Tehran'))
-#     shamsi_time = jdatetime.datetime.fromgregorian(datetime=iran_time)
-
-#     weekday_en = shamsi_time.strftime('%A')     # مثلاً Saturday
-#     month_en = shamsi_time.strftime('%B')       # مثلاً Farvardin
-
-#     weekday_fa = weekday_names.get(weekday_en, weekday_en)
-#     month_fa = month_names.get(month_en, month_en)
-
-#     date_str = f"{shamsi_time.day} {month_fa} {shamsi_time.year}"
-#     time_str = shamsi_time.strftime('%H:%M:%S')
-
-#     response = f'{weekday_fa} {date_str} \n\nزمان: {time_str}'
-#     bot.reply_to(message, f'تاریخ 📅 و زمان ⏰ فعلی:\n\n{response}')
 
 
 reply_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
@@ -496,7 +476,7 @@ def option_messages(message):
         bot.reply_to(message, 'درود بر تو گل🌹')         
         
     elif message.text == 'ربات': 
-        Bot_Response = f'جانم @{message.from_user.username}  کارم داشتی؟\n\n🔸برای ارتباط با ربات کلمه <b>(شروع)</b> را ارسال کنید\n\n🔺و برای اطلاع از تاریخ و ساعت امروز کلمه<b> (زمان) </b>را ارسال کنید'
+        Bot_Response = f'جانم @{message.from_user.username}  کارم داشتی؟\n\n🔸برای ارتباط با من کلمه <b> «شروع» </b> را ارسال کن'
         bot.send_message(message.chat.id, text=Bot_Response, parse_mode="HTML")
 
                
@@ -572,10 +552,12 @@ def option_messages(message):
     elif message.text == 'من بورم':
         bot.reply_to(message, 'به سلامت شه هوا ره دار')        
     
-    elif message.text == 'روبات':
-        Bot_Response = f'جان @{message.from_user.username} مه ره کار داشتی؟\n\n🔸 برای گپ بزوعن با ربات کلمه <b>(شروع)</b>  ره راهی هاکان\n\n🔺و برای اطلاع داشتن از تاریخ و ساعت امروز کلمه<b> (زمان) </b>ره راهی هاکان'
+    elif message.text == 'بات':
+        Bot_Response = f'جان @{message.from_user.username} مه ره کار داشتی؟\n\n🔸 برای گپ بزوعن با من کلمه <b> «گپ» </b>  ره راهی هاکان'
         bot.send_message(message.chat.id, text=Bot_Response, parse_mode= 'HTML') 
    
+    elif message.text == 'گپ':
+        bot.reply_to(message, 'سلام من علی بات🤖 هستمه برای اطلاع داشتن از مه قابلیت کلمه  <b> «لیست» </b> ره راهی هاکان', parse_mode= 'HTML')
         
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))  # Render به PORT مقدار می‌ده
