@@ -163,6 +163,38 @@ def welcome_new_user(message):
         response = f' {weekday_fa} {date_str} \n\nزمان: {time_str}  '
         bot.send_message(message.chat.id, f'درود به گپمون خوش اومدی✨❤️{message.from_user.first_name}\n\nامروز{response}')
 
+@bot.chat_join_request_handler(func=lambda r: True)
+def approve(r):
+    try:
+        bot.approve_chat_join_request(r.chat.id, r.from_user.id)
+        bot.send_message(
+            r.chat.id,
+            f"کاربر <b>{r.from_user.first_name}</b> در گروه پذیرفته شد.",
+            parse_mode="HTML"
+        )
+    except Exception as e:
+        print(f"خطا در تأیید عضویت: {e}")
+
+def is_user_admin(chat_id, user_id):
+    try:
+        admins = bot.get_chat_administrators(chat_id)
+        for admin in admins:
+            if admin.user.id == user_id:
+                return True
+        return False
+    except Exception as e:
+        print(f"خطا در بررسی مدیر بودن: {e}")
+        return False
+
+
+def is_user_admin(chat_id, user_id):
+    admins = bot.get_chat_administrators(chat_id)
+    for admin in admins:
+        if admin.user.id == user_id:
+            return True
+    return False
+
+
 # دیکشنری برای شمارش تخلف‌ها
 user_warnings = {}
 
@@ -219,18 +251,7 @@ def handle_left_member(message):
     bot.reply_to(message, "به سلامت👋")
 
 
-@bot.chat_join_request_handler(func=lambda r: True)
-def approve(r):
-    bot.approve_chat_join_request(r.chat.id, r.from_user.id)
-    bot.send_message(
-        r.chat.id, f" کاربر {r.from_user.first_name}\nدر گروه پذیرفته شد")
 
-def is_user_admin(chat_id, user_id):
-    admins = bot.get_chat_administrators(chat_id)
-    for admin in admins:
-        if admin.user.id == user_id:
-            return True
-    return False
 
 
 
@@ -446,91 +467,83 @@ def welcome(message):
 
 
 @bot.message_handler(content_types=['text'])
-def option_messages(message): 
-    
+def option_messages(message):
     text = message.text.lower().strip()
-    if text == 'ارتباط با ما📞':
-       bot.reply_to(message, 'آیدی سازنده ربات برای ارتباط: @AliamA7931')
-       
+    name = message.from_user.first_name
+
+    print("پیام دریافت شد:", text)
+
+    if text == 'شروع':
+        bot.reply_to(message, 'سلام من علی بات🤖 هستم\n\nبرای اطلاع از قابلیت من کلمه <b> «لیست» </b> رو ارسال کن', parse_mode="HTML")
+
     elif text == 'مدیریت گروه🤵‍♂️':
-        bot.reply_to(message, 'برای اینکه ربات بتواند گروه شما را مدیریت کند\n\nابتدا باید ربات را در گروه خود عضو و سپس ربات را ادمین کامل کنید و بعد میتوانید از ربات استفاده کنید')
-     
-    elif text == 'شروع':
-        bot.reply_to(message, 'سلام من علی بات🤖هستم\n\n برای اطلاع از قابلیت من کلمه <b> «لیست» </b> رو ارسال کن', parse_mode="HTML")
-        print(message.text, 'پیام دریافت شد')
-    
+        bot.reply_to(message, 'برای اینکه ربات بتواند گروه شما را مدیریت کند\n\nابتدا باید ربات را در گروه خود عضو کرده و سپس ادمین کامل کنید.')
+
     elif text == 'لیست':
-        bot.send_message(message.chat.id,'1-<code> مدیریت گروه🤵‍♂️</code>\n\n2-<code>بیوگرافی🗨️</code>\n\n3-<code> اصطلاحات انگلیسی🔠</code>\n\n4-<code> جرعت حقیقت❓</code>\n\n5-<code> جوک😄</code>\n\n6-<code>فونت اسم♍</code>\n\n7-<code> زبان هخامنشی𐎠</code>\n\n8-<code> دانستنی⁉️</code>\n\n9-<code> ارتباط با ما📞</code>\n\n<b>متن ها به صورت مونو هستند روی متن بزنید کپی میشوند</b>', parse_mode="HTML")   
-        bot.reply_to(message, 'لیست قابلیت ربات ارسال شد')   
-    elif text == 'سلام':
-        bot.reply_to(message, 'سلام بر شما')
+        bot.send_message(message.chat.id,
+            '1-<code> مدیریت گروه🤵‍♂️</code>\n\n'
+            '2-<code>بیوگرافی🗨️</code>\n\n'
+            '3-<code> اصطلاحات انگلیسی🔠</code>\n\n'
+            '4-<code> جرعت حقیقت❓</code>\n\n'
+            '5-<code> جوک😄</code>\n\n'
+            '6-<code>فونت اسم♍</code>\n\n'
+            '7-<code> زبان هخامنشی𐎠</code>\n\n'
+            '8-<code> دانستنی⁉️</code>\n\n'
+            '9-<code> ارتباط با ما📞</code>\n\n'
+            '<b>متن‌ها به صورت مونو هستند، برای کپی روی متن بزنید</b>',
+            parse_mode="HTML")
+        bot.reply_to(message, 'لیست قابلیت‌های ربات ارسال شد')
 
-    elif text == 'سلام خوبی':
-        bot.reply_to(message, 'خوبم ممنون شما خوبی')
-        
-    elif text == 'خوبی':
-        bot.reply_to(message, 'سپاس به خوبی شما') 
+    elif text == 'ارتباط با ما📞':
+        bot.reply_to(message, 'آیدی سازنده ربات: @AliamA7931')
 
-    elif text == 'خوب هستی':
-        bot.reply_to(message, ' اره خودت خوبی')
-        
+    elif text in ['سلام', 'سلام خوبی', 'خوبی', 'خوب هستی', 'چطوری']:
+        bot.reply_to(message, 'سلام! خوبی؟ چطور می‌تونم کمکت کنم؟')
+
     elif text == 'چه خبرا':
-        bot.reply_to(message, 'خبر سلامتیت شما چه خبر')
-           
+        bot.reply_to(message, 'خبر سلامتیت، تو چه خبر؟')
+
     elif text == 'منم سلامتی خبری نیست':
-        bot.reply_to(message, 'آها خداروشکر')
-       
+        bot.reply_to(message, 'آها، خدا رو شکر')
+
     elif text == 'خبر خیر سلامتی':
-        bot.reply_to(message, 'همیشه سلامت باشی😊')
-        
-    elif text == 'فدات':
-        bot.reply_to(message, 'قربون شما❤️')
-        
-    elif text == 'فدابشم':
-        bot.reply_to(message, 'نشی بمونی ارزش داری عزیز☺️')
-         
-    elif text == 'خداحافظ':
-        bot.reply_to(message, 'خدانگهدار👋')
-        
-    elif text == 'بای':
-        bot.reply_to(message, 'گودبای')
-                                 
+        bot.reply_to(message, 'همیشه سلامت باشی')
+
+    elif text in ['فدات', 'فدابشم']:
+        bot.reply_to(message, 'قربونت عزیز')
+
+    elif text in ['خداحافظ', 'بای']:
+        bot.reply_to(message, 'خدانگهدار!')
+
     elif text == 'کجایی':
-        bot.reply_to(message, 'کجا میتونستم باشم تو تلگرامم دیگه😐!')
-        
+        bot.reply_to(message, 'تو تلگرام منتظرم که باهات حرف بزنم!')
 
     elif text == 'اهل کجایی':
-        bot.reply_to(message, 'از سیاره ربات ها اینم شد سوال!')
-        
+        bot.reply_to(message, 'از سیاره ربات‌ها اینم شد سوال!')
+
     elif text == 'رباط':
-        bot.reply_to(message, 'معلم ادبیاتت کی بودش زنده میخامش ')
+        bot.reply_to(message, 'معلم ادبیاتت کی بود؟ زنده‌اش می‌خوام!')
 
     elif text == 'چیکار میکنی':
-        bot.reply_to(message, 'بقیه رباتا چیکار میکنن منم دارم همونکارو میکنم!')
+        bot.reply_to(message, 'مثل بقیه رباتا، گوش به فرمانم!')
 
     elif text == 'اسمت چیه':
         bot.reply_to(message, 'اسمم علی بات🤖 هست')
 
-    elif text == 'چطوری':
-        bot.reply_to(message, 'خوبم شکر خدا')
-        
     elif text == 'درود':
-        bot.reply_to(message, 'درود بر تو گل🌹')         
-        
-    elif text == 'ربات': 
-        Bot_Response = f'جانم @{message.from_user.username}  کارم داشتی؟\n\n🔸برای ارتباط با من کلمه <b> «شروع» </b> را ارسال کن'
-        bot.send_message(message.chat.id, text=Bot_Response, parse_mode="HTML")
+        bot.reply_to(message, 'درود بر تو گل🌹')
 
-               
+    elif text == 'ربات':
+        username = message.from_user.username or name
+        Bot_Response = f'جانم @{username}، کارم داشتی؟\n\n🔸برای ارتباط با من، کلمه <b> «شروع» </b> رو ارسال کن'
+        bot.send_message(message.chat.id, Bot_Response, parse_mode="HTML")
 
-
-####################### Mazani Language###################### 
-        
+    # مازندرانی
     elif text == 'سلام خاری':
         bot.reply_to(message, 'خارمه ته خاری')
-        
+
     elif text == 'خاری':
-        bot.reply_to(message, ' اره ته چیتی هستی؟')
+        bot.reply_to(message, 'اره ته چیتی هستی؟')
 
     elif text == 'اره خارمه':
         bot.reply_to(message, 'خداره شکر')
