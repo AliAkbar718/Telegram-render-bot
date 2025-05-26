@@ -73,10 +73,7 @@ def index():
    
     
 
-
-reply_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
-reply_keyboard.add('ارتباط با ما📞 ', 'مدیریت گروه🤵‍♂️', 'بیوگرافی🗨️', 'اصطلاحات انگلیسی🔠', 'جوک😄', 'زبان هخامنشی𐎠', 'فونت اسم♍', 'جرعت حقیقت❔', 'دانستنی⁉️')
-
+    
 weekday_names = {
     'Saturday': 'شنبه',
     'Sunday': 'یک‌شنبه',
@@ -104,12 +101,24 @@ month_names = {
 
 @bot.message_handler(func=lambda message: message.text.strip().lower() == 'زمان')
 def send_jalali_datetime(message):
-    now = jdatetime.datetime.now()
-    weekday_name = now.strftime('%A')  # نام روز هفته به فارسی
-    date_str = now.strftime('%d %B %Y')  # تاریخ به‌صورت متنی
-    time_str = now.strftime('%H:%M:%S')  # زمان فعلی
-    response = f'{weekday_name} {date_str} \n\nزمان: {time_str}'
-    bot.reply_to(message, f'  تاریخ 📅 و زمان ⏰ فعلی:\n\n{response}')
+    iran_time = datetime.now(pytz.timezone('Asia/Tehran'))
+    shamsi_time = jdatetime.datetime.fromgregorian(datetime=iran_time)
+
+    weekday_en = shamsi_time.strftime('%A')     # مثلاً Saturday
+    month_en = shamsi_time.strftime('%B')       # مثلاً Farvardin
+
+    weekday_fa = weekday_names.get(weekday_en, weekday_en)
+    month_fa = month_names.get(month_en, month_en)
+
+    date_str = f"{shamsi_time.day} {month_fa} {shamsi_time.year}"
+    time_str = shamsi_time.strftime('%H:%M:%S')
+
+    response = f'{weekday_fa} {date_str} \n\nزمان: {time_str}'
+    bot.reply_to(message, f'تاریخ 📅 و زمان ⏰ فعلی:\n\n{response}')
+
+
+reply_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
+reply_keyboard.add('ارتباط با ما📞 ', 'مدیریت گروه🤵‍♂️', 'بیوگرافی🗨️', 'اصطلاحات انگلیسی🔠', 'جوک😄', 'زبان هخامنشی𐎠', 'فونت اسم♍', 'جرعت حقیقت❔', 'دانستنی⁉️')
 
 
 # حروف فارسی به حروف میخی
@@ -154,25 +163,6 @@ def handle_photo(message):
     if message.video:
         bot.reply_to(message, 'این یک ویدیو📽️ هست')
 
-
-
-# @bot.message_handler(content_types=['new_chat_members'])
-# def welcome_new_member(message):
-#     for new_member in message.new_chat_members:
-#         iran_time = datetime.now(pytz.timezone('Asia/Tehran'))
-#         shamsi_time = jdatetime.datetime.fromgregorian(datetime=iran_time)
-
-#         weekday_en = shamsi_time.strftime('%A')     # مثلاً Saturday
-#         month_en = shamsi_time.strftime('%B')       # مثلاً Farvardin
-
-#         weekday_fa = weekday_names.get(weekday_en, weekday_en)
-#         month_fa = month_names.get(month_en, month_en)
-
-#         date_str = f"{shamsi_time.day} {month_fa} {shamsi_time.year}"
-#         time_str = shamsi_time.strftime('%H:%M:%S')
-
-#         response = f'{weekday_fa} {date_str} \n\nزمان: {time_str}'
-#         bot.reply_to(message, f'تاریخ 📅 و زمان ⏰ فعلی:\n\n{response}')
 
 
 @bot.message_handler(content_types=['left_chat_member'])
