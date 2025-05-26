@@ -73,48 +73,24 @@ def index():
    
     
 
-    
-weekday_names = {
-    'Saturday': 'شنبه',
-    'Sunday': 'یک‌شنبه',
-    'Monday': 'دوشنبه',
-    'Tuesday': 'سه‌شنبه',
-    'Wednesday': 'چهارشنبه',
-    'Thursday': 'پنج‌شنبه',
-    'Friday': 'جمعه'
-}
 
-month_names = {
-    'Farvardin': 'فروردین',
-    'Ordibehesht': 'اردیبهشت',
-    'Khordad': 'خرداد',
-    'Tir': 'تیر',
-    'Mordad': 'مرداد',
-    'Shahrivar': 'شهریور',
-    'Mehr': 'مهر',
-    'Aban': 'آبان',
-    'Azar': 'آذر',
-    'Dey': 'دی',
-    'Bahman': 'بهمن',
-    'Esfand': 'اسفند'
-}
 
-@bot.message_handler(func=lambda message: message.text.strip().lower() == 'زمان')
-def send_jalali_datetime(message):
-    iran_time = datetime.now(pytz.timezone('Asia/Tehran'))
-    shamsi_time = jdatetime.datetime.fromgregorian(datetime=iran_time)
+# @bot.message_handler(func=lambda message: message.text.strip().lower() == 'زمان')
+# def send_jalali_datetime(message):
+#     iran_time = datetime.now(pytz.timezone('Asia/Tehran'))
+#     shamsi_time = jdatetime.datetime.fromgregorian(datetime=iran_time)
 
-    weekday_en = shamsi_time.strftime('%A')     # مثلاً Saturday
-    month_en = shamsi_time.strftime('%B')       # مثلاً Farvardin
+#     weekday_en = shamsi_time.strftime('%A')     # مثلاً Saturday
+#     month_en = shamsi_time.strftime('%B')       # مثلاً Farvardin
 
-    weekday_fa = weekday_names.get(weekday_en, weekday_en)
-    month_fa = month_names.get(month_en, month_en)
+#     weekday_fa = weekday_names.get(weekday_en, weekday_en)
+#     month_fa = month_names.get(month_en, month_en)
 
-    date_str = f"{shamsi_time.day} {month_fa} {shamsi_time.year}"
-    time_str = shamsi_time.strftime('%H:%M:%S')
+#     date_str = f"{shamsi_time.day} {month_fa} {shamsi_time.year}"
+#     time_str = shamsi_time.strftime('%H:%M:%S')
 
-    response = f'{weekday_fa} {date_str} \n\nزمان: {time_str}'
-    bot.reply_to(message, f'تاریخ 📅 و زمان ⏰ فعلی:\n\n{response}')
+#     response = f'{weekday_fa} {date_str} \n\nزمان: {time_str}'
+#     bot.reply_to(message, f'تاریخ 📅 و زمان ⏰ فعلی:\n\n{response}')
 
 
 reply_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
@@ -162,6 +138,31 @@ def handle_photo(message):
 def handle_photo(message):
     if message.video:
         bot.reply_to(message, 'این یک ویدیو📽️ هست')
+
+weekday_names = {
+    'Saturday': 'شنبه',
+    'Sunday': 'یک‌شنبه',
+    'Monday': 'دوشنبه',
+    'Tuesday': 'سه‌شنبه',
+    'Wednesday': 'چهارشنبه',
+    'Thursday': 'پنج‌شنبه',
+    'Friday': 'جمعه'
+}
+
+month_names = {
+    'Farvardin': 'فروردین',
+    'Ordibehesht': 'اردیبهشت',
+    'Khordad': 'خرداد',
+    'Tir': 'تیر',
+    'Mordad': 'مرداد',
+    'Shahrivar': 'شهریور',
+    'Mehr': 'مهر',
+    'Aban': 'آبان',
+    'Azar': 'آذر',
+    'Dey': 'دی',
+    'Bahman': 'بهمن',
+    'Esfand': 'اسفند'
+}
 
 @bot.message_handler(content_types=['new_chat_members'])
 def welcome_new_user(message):
