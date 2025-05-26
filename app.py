@@ -163,6 +163,24 @@ def handle_photo(message):
     if message.video:
         bot.reply_to(message, 'این یک ویدیو📽️ هست')
 
+@bot.message_handler(content_types=['new_chat_members'])
+def welcome_new_user(message):
+    for new_user in message.new_chat_members:
+        try:
+            name = new_user.first_name or "کاربر عزیز"
+
+            # زمان فعلی میلادی و تبدیل به شمسی
+            now = datetime.datetime.now()
+            jalali_date = jdatetime.date.fromgregorian(date=now.date()).strftime('%Y/%m/%d')
+            time_now = now.strftime('%H:%M')
+
+            # پیام خوش‌آمد
+            welcome_msg = f"سلام {name} عزیز!\nخوش اومدی به گروه!\nامروز {jalali_date} هست و ساعت {time_now}"
+            bot.send_message(message.chat.id, welcome_msg)
+
+        except Exception as e:
+            print(f"خطا در پیام خوش‌آمد: {e}")
+
 
 
 @bot.message_handler(content_types=['left_chat_member'])
