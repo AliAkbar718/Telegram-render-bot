@@ -64,18 +64,17 @@ def handle_message(message):
             if warn_count == 1:
                 bot.send_message(
                     chat_id,
-                    f"⚠️ کاربر {first_name}\nارسال لینک 1 از 2\ ارسال لینک ممنوع هست! در صورت تکرار حذف می شوید "
+                    f"⚠️ کاربر {first_name}\nارسال لینک 1 از 2\nلطفاً از ارسال لینک خودداری کنید. در صورت تکرار حذف خواهید شد."
                 )
             elif warn_count >= 2:
                 bot.send_message(
                     chat_id,
-                    f"⛔️ کاربر {first_name}\nارسال لینک 2 از 2\ از گروه حذف شد"
+                    f"⛔️ کاربر {first_name}\nارسال لینک 2 از 2\nشما از گروه حذف شدید."
                 )
                 bot.ban_chat_member(chat_id, user_id)
 
         except Exception as e:
             print(f"خطا در هشدار یا حذف: {e}")
-
 
 # بررسی عضویت
 def is_user_member(user_id):
