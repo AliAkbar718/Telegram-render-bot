@@ -74,9 +74,9 @@ def index():
     
 
 
+reply_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
+reply_keyboard.add('ارتباط با ما📞 ', 'مدیریت گروه🤵‍♂️', 'بیوگرافی🗨️', 'اصطلاحات انگلیسی🔠', 'جوک😄', 'زبان هخامنشی𐎠', 'فونت اسم♍', 'جرعت حقیقت❔', 'دانستنی⁉️')
 
-
-    
 weekday_names = {
     'Saturday': 'شنبه',
     'Sunday': 'یک‌شنبه',
@@ -101,14 +101,6 @@ month_names = {
     'Bahman': 'بهمن',
     'Esfand': 'اسفند'
 }
-
-
-CHANNEL_USERNAME = 'rap_family1'
-
-
-reply_keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=False)
-reply_keyboard.add('ارتباط با ما📞 ', 'مدیریت گروه🤵‍♂️', 'بیوگرافی🗨️', 'اصطلاحات انگلیسی🔠', 'جوک😄', 'زبان هخامنشی𐎠', 'فونت اسم♍', 'جرعت حقیقت❔', 'دانستنی⁉️')
-
 
 @bot.message_handler(func=lambda message: message.text.strip().lower() == 'زمان')
 def send_jalali_datetime(message):
