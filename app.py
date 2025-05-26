@@ -445,7 +445,7 @@ def welcome(message):
     bot.reply_to(message,"از منوی زیر در صفحه کلید گزینه ای را انتخاب نمایید:", reply_markup=reply_keyboard)
 
 
-@bot.message_handler(func= lambda message: True)
+@bot.message_handler(func= lambda message: message.text)
 def option_messages(message): 
     if message.text == 'ارتباط با ما📞':
        bot.reply_to(message, 'آیدی سازنده ربات برای ارتباط: @AliamA7931')
