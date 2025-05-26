@@ -447,6 +447,7 @@ def welcome(message):
 
 @bot.message_handler(content_types=['text'])
 def option_messages(message): 
+    
     text = message.text.lower().strip()
     if text == 'ارتباط با ما📞':
        bot.reply_to(message, 'آیدی سازنده ربات برای ارتباط: @AliamA7931')
@@ -456,6 +457,7 @@ def option_messages(message):
      
     elif text == 'شروع':
         bot.reply_to(message, 'سلام من علی بات🤖هستم\n\n برای اطلاع از قابلیت من کلمه <b> «لیست» </b> رو ارسال کن', parse_mode="HTML")
+        print(message.text, 'پیام دریافت شد')
     
     elif text == 'لیست':
         bot.send_message(message.chat.id,'1-<code> مدیریت گروه🤵‍♂️</code>\n\n2-<code>بیوگرافی🗨️</code>\n\n3-<code> اصطلاحات انگلیسی🔠</code>\n\n4-<code> جرعت حقیقت❓</code>\n\n5-<code> جوک😄</code>\n\n6-<code>فونت اسم♍</code>\n\n7-<code> زبان هخامنشی𐎠</code>\n\n8-<code> دانستنی⁉️</code>\n\n9-<code> ارتباط با ما📞</code>\n\n<b>متن ها به صورت مونو هستند روی متن بزنید کپی میشوند</b>', parse_mode="HTML")   
