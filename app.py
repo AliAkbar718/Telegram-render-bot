@@ -181,6 +181,40 @@ def is_user_admin(chat_id, user_id):
             return True
     return False
 
+# حافظه تخلفات کاربران (شماره کاربر: تعداد لینک‌ها)
+user_warnings = {}
+
+# شناسایی لینک در پیام
+def contains_link(text):
+    if not text:
+        return False
+    return any(word in text.lower() for word in ['http', 'https', 't.me', '@'])
+
+# هندلر همه پیام‌ها
+@bot.message_handler(func=lambda m: True, content_types=['text'])
+def handle_messages(message):
+    user_id = message.from_user.id
+    chat_id = message.chat.id
+
+    if contains_link(message.text):
+        try:
+            # حذف پیام
+            bot.delete_message(chat_id, message.message_id)
+
+            # افزایش اخطار
+            user_warnings[user_id] = user_warnings.get(user_id, 0) + 1
+
+            # اگر بار اولشه: اخطار بده
+            if user_warnings[user_id] == 1:
+                bot.send_message(chat_id,
+                    f"کاربر {message.from_user.first_name}، ارسال لینک در گروه ممنوع است!\nدر صورت تکرار، حذف خواهید شد.")
+            else:
+                # اخطار دوم: حذف از گروه
+                bot.send_message(chat_id, f"{message.from_user.first_name} به دلیل ارسال مکرر لینک، از گروه حذف شد.")
+                bot.ban_chat_member(chat_id, user_id)
+
+        except Exception as e:
+            print(f"خطا در حذف یا اخطار: {e}")
 
 
 @bot.message_handler(func=lambda m: m.text == 'پین')
