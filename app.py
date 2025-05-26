@@ -557,7 +557,7 @@ def option_messages(message):
         bot.send_message(message.chat.id, text=Bot_Response, parse_mode= 'HTML') 
    
     elif message.text == 'گپ':
-        bot.reply_to(message, 'سلام من علی بات🤖 هستمه برای اطلاع داشتن از مه قابلیت کلمه  <b> «لیست» </b> ره راهی هاکان', parse_mode= 'HTML')
+        bot.reply_to(message, 'سلام من علی بات🤖 هستمه\n\n برای اطلاع داشتن از مه قابلیت کلمه \n\n <b> «لیست» </b> ره راهی هاکان', parse_mode= 'HTML')
         
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))  # Render به PORT مقدار می‌ده
